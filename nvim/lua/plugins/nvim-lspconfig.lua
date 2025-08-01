@@ -23,6 +23,7 @@ local config = function()
                   "intelephense",
                   -- "sqls",
                   -- "clangd", -- Added for C++ support
+                  "tailwindcss", -- Added Tailwind CSS LSP
             },
             automatic_installation = true,
       })
@@ -163,7 +164,7 @@ local config = function()
 
       -- SQL
       -- lspconfig.sqls.setup({
-            -- capabilities = capabilities,
+      --       capabilities = capabilities,
       --       on_attach = on_attach,
       --       filetypes = { "sql", "mysql" },
       --       root_dir = lspconfig.util.root_pattern(".git", "package.json") or vim.fn.getcwd(),
@@ -171,7 +172,7 @@ local config = function()
 
       local mason_registry = require("mason-registry")
       local vue_language_server = mason_registry.get_package("vue-language-server"):get_install_path()
-      .. "/node_modules/@vue/language-server"
+            .. "/node_modules/@vue/language-server"
 
       -- TypeScript/JavaScript
       lspconfig.ts_ls.setup({
@@ -294,8 +295,29 @@ local config = function()
             root_dir = lspconfig.util.root_pattern("Dockerfile", ".git"),
       })
 
+      -- Tailwind CSS
+      lspconfig.tailwindcss.setup({
+            capabilities = capabilities,
+            on_attach = on_attach,
+            filetypes = { "html", "css", "scss", "less", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+            root_dir = lspconfig.util.root_pattern("tailwind.config.js", "tailwind.config.ts", "package.json", ".git") or vim.fn.getcwd(),
+            settings = {
+                  tailwindCSS = {
+                        experimental = {
+                              classRegex = {
+                                    "tw`([^`]*)", -- For template literals like tw`bg-red-500`
+                                    "tw\\.(?:[^;]+)", -- For tw.xxx style
+                                    "tw\\(.*?\\)", -- For tw() calls
+                                    "className=['\"]([^'\"]+)['\"]", -- For className props
+                              },
+                        },
+                        validate = true,
+                  },
+            },
+      })
+
       -- Set up EFM tools
-      -- local gofumpt = require("efmls-configs.formatters.gofumpt")
+      local gofumpt = require("efmls-configs.formatters.gofumpt")
       local go_revive = require("efmls-configs.linters.go_revive")
       local solhint = require("efmls-configs.linters.solhint")
       local prettier_d = require("efmls-configs.formatters.prettier_d")
@@ -383,17 +405,17 @@ local config = function()
       })
 
       -- C++ with clangd
---       lspconfig.clangd.setup({
---             capabilities = capabilities,
---             on_attach = on_attach,
---             filetypes = { "c", "cpp", "objc", "objcpp" },
---             root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", ".git") or vim.fn.getcwd(),
---             settings = {
---                   clangd = {
---                         arguments = { "--background-index", "--suggest-missing-includes" },
---                   },
---             },
---       })
+      -- lspconfig.clangd.setup({
+      --       capabilities = capabilities,
+      --       on_attach = on_attach,
+      --       filetypes = { "c", "cpp", "objc", "objcpp" },
+      --       root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", ".git") or vim.fn.getcwd(),
+      --       settings = {
+      --             clangd = {
+      --                   arguments = { "--background-index", "--suggest-missing-includes" },
+      --             },
+      --       },
+      -- })
 end
 return {
       "neovim/nvim-lspconfig",

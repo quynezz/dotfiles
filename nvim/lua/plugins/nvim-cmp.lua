@@ -60,12 +60,14 @@ return {
                     winhighlight = "Normal:Pmenu,FloatBorder:PmenuBorder,CursorLine:PmenuSel",
                 },
             },
-            formatting = { format = lspkind.cmp_format({ maxwidth = 50, ellipsis_char = "..." }) },
-        })
+            formatting = {
+                format = lspkind.cmp_format({ maxwidth = 50, ellipsis_char = "..."}),
+        },
+    })
 
-        -- Force highlight definition
-        vim.cmd("highlight Pmenu guibg=#1f1f1f")
-        vim.cmd(":messageshighlight PmenuBorder guifg=#ffffff guibg=#1f1f1f")
-        vim.notify("cmp setup done, window: " .. vim.inspect(cmp.get_config().window), "info")
-    end,
+    -- Force highlight definition
+    vim.cmd("highlight Pmenu guibg=#1f1f1f")
+    vim.cmd(":messageshighlight PmenuBorder guifg=#ffffff guibg=#1f1f1f")
+    vim.notify("cmp setup done, window: " .. vim.inspect(cmp.get_config().window), "info")
+end,
 }

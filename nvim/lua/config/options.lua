@@ -18,3 +18,6 @@ vim.opt.softtabstop = 4
 vim.opt.expandtab = true
 -- Change all the cursor line (visual, insert and normal) into "block"
 vim.opt.guicursor = "n-v-c-i-ci-ve-r-cr-o:block"
+-- Disable the swap file
+vim.o.swapfile = false
+

@@ -73,6 +73,7 @@ return {
                     NeoTreeFileName = { fg = "#FFFFFF", bg = "NONE" }, -- File names (default)
                     NeoTreeCursorLine = { bg = "NONE" }, -- Ensure cursor line background is transparent
                     markdownBold = { fg = "#FFFFFF", bold = true }, -- Bold text in Markdown
+                    markdownItalic = { fg = "#c4a7e7", italic = true }, -- Italic text in Markdown
                 },
 
                 before_highlight = function(group, highlight, palette)
@@ -112,7 +113,8 @@ return {
                 vim.api.nvim_set_hl(0, "NeoTreeFileName", { fg = "#FFFFFF", bg = "NONE" })
                 vim.api.nvim_set_hl(0, "NeoTreeCursorLine", { bg = "NONE" })
                 vim.api.nvim_set_hl(0, "NeoTreeDirectoryName", { fg = "#E5E5E5", bg = "NONE" })
-                vim.api.nvim_set_hl(0, "markdownBold", { fg = "#FFFFFF", bg = "NONE", bold = true })
+                vim.api.nvim_set_hl(0, "markdownBold", { fg = "#f6c177", bg = "NONE", bold = true })
+                vim.api.nvim_set_hl(0, "markdownItalic", { fg = "#c4a7e7", bg = "NONE", italic = true, bold = false })
             end,
         },
     }

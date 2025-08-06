@@ -1,0 +1,88 @@
+[terminal.shell]
+program = "wsl"
+args = ["--distribution", "Ubuntu-24.04", "--exec", "zsh", "--login"]
+
+
+[font]
+size = 14
+bold = { family = "FiraCode Nerd Font Mono", style = "Regular" }
+
+[font.normal]
+family = "FiraCode Nerd Font Propo"
+style = "Regular"
+
+[font.offset]
+x = 0
+y = 1
+
+[font.italic]
+family = "FiraCode Nerd Font Propo"
+style = "Italic"
+
+[font.bold_italic]
+family = "FiraCode Nerd Font Propo"
+style = "Bold Italic"
+
+
+[mouse]
+hide_when_typing = true
+
+
+[window]
+padding = { x = 10, y = 0 }
+opacity = 1
+blur = true
+dynamic_padding = false
+dynamic_title = false
+decorations = "Full"
+title = "3x3q"
+startup_mode = "Windowed"
+
+[colors.primary]
+background = "#000000"
+foreground = "#E0DEF4"
+
+[colors.cursor]
+cursor = "#FFFFFF"
+
+[colors.selection]
+background = "#2A2837"
+
+[colors.normal]
+black = "#26233A"
+red = "#EB6F92"
+green = "#31748F"
+yellow = "#F6C177"
+blue = "#9CCFD8"
+magenta = "#C4A7E7"
+cyan = "#EBBCBA"
+white = "#E0DEF4"
+
+[colors.bright]
+black = "#26233A"
+red = "#EB6F92"
+green = "#31748F"
+yellow = "#F6C177"
+blue = "#9CCFD8"
+magenta = "#C4A7E7"
+cyan = "#EBBCBA"
+white = "#E0DEF4"
+
+[[keyboard.bindings]]
+key = "C"
+mods = "Control"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "V"
+mods = "Control"
+action = "Paste"
+
+[[keyboard.bindings]]
+key = "D"
+mods = "Alt|Shift"
+action = "CreateNewWindow"
+
+# Note: do no config the directory name :D, might config later
+# [[working_directories]]
+# path = "/mnt/c/Users/3x3q/Documents/Projects"

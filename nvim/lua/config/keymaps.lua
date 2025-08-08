@@ -20,6 +20,10 @@ keymap.set("v", ">", ">gv")
 vim.api.nvim_set_keymap("n", "<C-_>", "gcc", { noremap = false })
 vim.api.nvim_set_keymap("v", "<C-_>", "gcc", { noremap = false })
 
+-- Override "=G" to reformat based on filetype
+vim.api.nvim_set_keymap("n", "=G", ":lua vim.lsp.buf.format()<CR>", { noremap = true, silent = true })
+
+
 -- Define :FormatCode command
 vim.api.nvim_create_user_command("FormatCode", function()
     -- Save cursor position
@@ -29,7 +33,7 @@ vim.api.nvim_create_user_command("FormatCode", function()
     vim.opt.shiftwidth = 4
     vim.opt.expandtab = true
     -- Format the entire file
-    vim.cmd("normal! gg=G") -- Use = to reindent based on filetype
+    vim.cmd(":lua vim.lsp.buf.format()") -- Use = to reindent based on filetype
     -- Remove trailing whitespace
     vim.cmd([[%s/\s\+$//e]])
     -- Restore cursor position

@@ -21,6 +21,7 @@ local config = function()
       "gitignore",
       "python",
       "vue",
+      "svelte",
     },
     auto_install = true,
     highlight = {

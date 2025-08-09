@@ -1,47 +1,109 @@
-return {
-    "nvim-neo-tree/neo-tree.nvim",
-    opts = {
-        window = {
-            position = "left",
-        },
-        event_handlers = {
-            {
-                event = "neo_tree_buffer_enter",
-                handler = function()
-                    -- Enable relative line numbers
-                    vim.opt_local.relativenumber = true
-                    -- Enable cursorline to highlight the current line number
-                    vim.opt_local.cursorline = true
-                    vim.opt_local.cursorlineopt = "both"
-                end,
-            },
-        },
-    },
-    init = function()
-        -- Set initial highlights
-        vim.api.nvim_set_hl(0, "LineNr", { fg = "#808080", bg = "NONE" })
-        vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#FFFFFF", bg = "NONE", bold = true })
-        vim.api.nvim_set_hl(0, "CursorLine", { bg = "NONE", bold = true }) -- Set cursor line to bold
-        vim.api.nvim_set_hl(0, "NeoTreePrompt", { fg = "#FFFFFF", bg = "#1C2526" }) -- Non-transparent background
-        vim.api.nvim_set_hl(0, "NeoTreeFloatNormal", { fg = "#FFFFFF", bg = "#1C2526" })
-        vim.api.nvim_set_hl(0, "NeoTreeNormal", { fg = "#FFFFFF", bg = "#1C2526" }) -- Non-transparent background
-        vim.api.nvim_set_hl(0, "NeoTreeTitleBar", { fg = "#E5E5E5", bg = "#1C2526" })
-        vim.api.nvim_set_hl(0, "NeoTreeStatusLine", { fg = "#FFD700", bg = "#1C2526" })
+local vim = vim
 
-        -- Ensure highlights persist after colorscheme changes
-        vim.api.nvim_create_autocmd("ColorScheme", {
-            pattern = "*",
-            callback = function()
-                vim.api.nvim_set_hl(0, "LineNr", { fg = "#808080", bg = "NONE" })
-                vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#FFFFFF", bg = "NONE", bold = true })
-                vim.api.nvim_set_hl(0, "CursorLine", { bg = "NONE", bold = true }) -- Set cursor line to bold
-                vim.api.nvim_set_hl(0, "NeoTreePrompt", { fg = "#FFFFFF", bg = "#1C2526" })
-                vim.api.nvim_set_hl(0, "NeoTreeFloatNormal", { fg = "#FFFFFF", bg = "#1C2526" })
-                vim.api.nvim_set_hl(0, "NeoTreeNormal", { fg = "#FFFFFF", bg = "#1C2526" }) -- Non-transparent background
-                vim.api.nvim_set_hl(0, "NeoTreeTitleBar", { fg = "#E5E5E5", bg = "#1C2526" })
-                vim.api.nvim_set_hl(0, "NeoTreeStatusLine", { fg = "#FFD700", bg = "#1C2526" })
-                vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE" })
-            end,
-        })
-    end,
+return {
+	"nvim-neo-tree/neo-tree.nvim",
+
+	opts = {
+		window = {
+			position = "left",
+			width = 35,
+			mappings = {
+				["l"] = "open",
+				["h"] = "close_node",
+			},
+		},
+		filesystem = {
+			filtered_items = {
+				hide_dotfiles = false,
+				hide_gitignored = false,
+				hide_by_name = {
+					".DS_Store",
+					"Thumbs.db",
+					".git",
+					".hg",
+					".svn",
+					".idea",
+					".vscode",
+					".cache",
+					".sass-cache",
+					".npm",
+					".yarn",
+					".pnp.*",
+					".env",
+					".env.local",
+					".env.development",
+					".env.production",
+					".env.test",
+					".env.staging",
+					".env.example",
+					".env.local.example",
+					".env.development.example",
+					".env.production.example",
+					".env.test.example",
+					".env.staging.example",
+					"node_modules",
+					"vendor",
+					"dist",
+					"build",
+					"coverage",
+					"logs",
+					"tmp",
+					"temp",
+					"cache",
+                    -- ignore framework-specific directories
+                    ".svelte-kit",
+                    ".next",
+                    ".nuxt",
+                    ".astro",
+                    ".parcel-cache",
+                    ".vite",
+                    ".gitignore"
+				},
+			},
+		},
+		default_component_configs = {
+			icon = {
+				folder_closed = "",
+				folder_open = "",
+				folder_empty = "",
+				default = "",
+			},
+			name = {
+				highlight = "NeoTreeFileName",
+			},
+		},
+	},
+
+	config = function(_, opts)
+		require("neo-tree").setup(opts)
+
+		vim.api.nvim_create_autocmd("FileType", {
+			pattern = "neo-tree",
+			callback = function()
+				vim.opt_local.number = true
+				vim.opt_local.relativenumber = true
+			end,
+		})
+	end,
+
+	init = function()
+		-- Highlights UI
+		local function set_hl()
+			vim.api.nvim_set_hl(0, "LineNr", { fg = "#949494", bg = "NONE" })
+			vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#FFFFFF", bg = "NONE", bold = true })
+			vim.api.nvim_set_hl(0, "CursorLine", { bg = "#262626", bold = true })
+			vim.api.nvim_set_hl(0, "NeoTreeNormal", { fg = "#FFFFFF", bg = "#1C2526" })
+			vim.api.nvim_set_hl(0, "NeoTreeFileName", { fg = "#E5E5E5", bg = "NONE" })
+			vim.api.nvim_set_hl(0, "NeoTreeModified", { fg = "#FFD700", bg = "NONE" })
+			vim.api.nvim_set_hl(0, "NeoTreeTitleBar", { fg = "#E5E5E5", bg = "#1C2526", bold = true })
+			vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE" })
+		end
+
+		set_hl()
+		vim.api.nvim_create_autocmd("ColorScheme", {
+			pattern = "*",
+
+			callback = set_hl,
+		})
+	end,
 }

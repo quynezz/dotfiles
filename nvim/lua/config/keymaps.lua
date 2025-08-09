@@ -1,5 +1,6 @@
 local opts = { noremap = true, silent = true }
 local keymap = vim.keymap
+local vim = vim
 
 keymap.set("n", "<leader>m", ":NvimTreeFocus<CR>", opts)
 keymap.set("n", "<leader>f", ":NvimTreeToggle<CR>", opts)
@@ -12,6 +13,7 @@ keymap.set("n", "<C-l>", "<C-w>l", opts)
 keymap.set("n", "<leader>sv", ":vsplit<CR>", opts)
 keymap.set("n", "<leader>sh", ":split<CR>", opts)
 keymap.set("n", "<leader>m", ":MaximizeToggle<CR>", opts)
+
 -- Indenting
 keymap.set("v", "<", "<gv")
 keymap.set("v", ">", ">gv")
@@ -20,52 +22,52 @@ keymap.set("v", ">", ">gv")
 vim.api.nvim_set_keymap("n", "<C-_>", "gcc", { noremap = false })
 vim.api.nvim_set_keymap("v", "<C-_>", "gcc", { noremap = false })
 
+-- Toggle the neo-tree
+vim.api.nvim_set_keymap("n", "<leader>e", ":Neotree toggle<CR>", { noremap = true, silent = true })
+
 -- Override "=G" to reformat based on filetype
 vim.api.nvim_set_keymap("n", "=G", ":lua vim.lsp.buf.format()<CR>", { noremap = true, silent = true })
 
-
 -- Define :FormatCode command
 vim.api.nvim_create_user_command("FormatCode", function()
-    -- Save cursor position
-    local cursor = vim.api.nvim_win_get_cursor(0)
-    -- Set indentation settings explicitly
-    vim.opt.tabstop = 4
-    vim.opt.shiftwidth = 4
-    vim.opt.expandtab = true
-    -- Format the entire file
-    vim.cmd(":lua vim.lsp.buf.format()") -- Use = to reindent based on filetype
-    -- Remove trailing whitespace
-    vim.cmd([[%s/\s\+$//e]])
-    -- Restore cursor position
-    vim.api.nvim_win_set_cursor(0, cursor)
-    vim.notify("Done Formatting!")
+	-- Save cursor position
+	local cursor = vim.api.nvim_win_get_cursor(0)
+	-- Set indentation settings explicitly
+	vim.opt.tabstop = 4
+	vim.opt.shiftwidth = 4
+	vim.opt.expandtab = true
+	-- Format the entire file
+	vim.cmd(":lua vim.lsp.buf.format()") -- Use = to reindent based on filetype
+	-- Remove trailing whitespace
+	vim.cmd([[%s/\s\+$//e]])
+	-- Restore cursor position
+	vim.api.nvim_win_set_cursor(0, cursor)
+	vim.notify("Done Formatting!")
 end, { desc = "Format entire file with 4-space indentation and return cursor to previous position" })
 
 -- Remove trailing whitespace
 vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = "*",
-    callback = function()
-        -- Save cursor position
-        local cursor = vim.api.nvim_win_get_cursor(0)
-        -- Remove trailing whitespace
-        vim.cmd([[%s/\s\+$//e]])
-        -- Restore cursor position
-        vim.api.nvim_win_set_cursor(0, cursor)
-    end,
+	pattern = "*",
+	callback = function()
+		-- Save cursor position
+		local cursor = vim.api.nvim_win_get_cursor(0)
+		-- Remove trailing whitespace
+		vim.cmd([[%s/\s\+$//e]])
+		-- Restore cursor position
+		vim.api.nvim_win_set_cursor(0, cursor)
+	end,
 })
 
 -- Set up keymaps for the delete all the buffer execpt the current buffer command
 vim.api.nvim_create_user_command("DeleteAllBuffersExceptCurrent", function()
-    -- Get the current buffer number
-    local current_buf = vim.api.nvim_get_current_buf()
-    -- Get all buffer numbers
-    local all_buffers = vim.api.nvim_list_bufs()
-    -- Iterate through all buffers and delete them if they are not the current one
-    for _, buf in ipairs(all_buffers) do
-        if buf ~= current_buf then
-            pcall(vim.api.nvim_buf_delete, buf, { force = true })
-        end
-    end
+	-- Get the current buffer number
+	local current_buf = vim.api.nvim_get_current_buf()
+	-- Get all buffer numbers
+	local all_buffers = vim.api.nvim_list_bufs()
+	-- Iterate through all buffers and delete them if they are not the current one
+	for _, buf in ipairs(all_buffers) do
+		if buf ~= current_buf then
+			pcall(vim.api.nvim_buf_delete, buf, { force = true })
+		end
+	end
 end, { desc = "Delete all buffers except the current one" })
-
-

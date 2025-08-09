@@ -240,6 +240,14 @@ local config = function()
         root_dir = lspconfig.util.root_pattern(".git"),
     })
 
+    -- TOML
+    lspconfig.taplo.setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+        filetypes = { "toml" },
+        root_dir = lspconfig.util.root_pattern("Cargo.toml", "pyproject.toml", ".git") or vim.fn.getcwd(),
+    })
+
     -- HTML
     lspconfig.html.setup({
         capabilities = capabilities,
@@ -250,6 +258,7 @@ local config = function()
         filetypes = { "html" },
         root_dir = lspconfig.util.root_pattern("package.json", ".git") or vim.fn.getcwd(),
     })
+
 
     -- CSS
     lspconfig.cssls.setup({
@@ -418,7 +427,7 @@ local config = function()
             client.server_capabilities.documentFormattingProvider = true
             client.server_capabilities.documentRangeFormattingProvider = true
             client.server_capabilities.diagnosticProvider = false
-            vim.notify("FileType🗄: " .. vim.bo.filetype, vim.log.levels.INFO)
+            vim.notify("File type 🗄: " .. vim.bo.filetype, vim.log.levels.INFO)
         end,
     })
 

@@ -3,6 +3,7 @@ local vim_modes = {
 	i = "i",
 	v = "v",
 }
+local vim = vim or {}
 
 local default_opts = {
 	noremap = true,
@@ -43,15 +44,16 @@ local mapkey = function(keymaps, command, vimmode, options)
 	local opts = get_opts(options)
 	vim.keymap.set(mode, lhs, rhs, opts)
 end
--- vim.keymap.set("n", "<leader>O", function()
---   if vim.bo.filetype == "cpp" then
---     vim.cmd("write")
---     local filepath = vim.fn.expand("%:p")
---     local filename = vim.fn.expand("%:t:r")
---     require("toggleterm").exec("g++ " .. filepath .. " -o " .. filename .. " && ./" .. filename)
---   else
---     vim.notify("Not a C++ file", vim.log.levels.WARN)
---   end
--- end, { desc = "Compile and run C++ file" })
---
+
+vim.keymap.set("n", "<leader>O", function()
+	if vim.bo.filetype == "cpp" then
+		vim.cmd("write")
+		local filepath = vim.fn.expand("%:p")
+		local filename = vim.fn.expand("%:t:r")
+		require("toggleterm").exec("g++ " .. filepath .. " -o " .. filename .. " && ./" .. filename)
+	else
+		vim.notify("Not a C++ file", vim.log.levels.WARN)
+	end
+end, { desc = "Compile and run C++ file" })
+
 return { mapkey = mapkey }

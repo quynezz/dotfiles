@@ -36,7 +36,7 @@ local mason_lspconfig = {
             "intelephense",
             "sqls",
             "clangd",
-            "svelte"
+            "svelte",
         },
         automatic_installation = true,
     },
@@ -57,11 +57,11 @@ local mason_tool_installer = {
             "hadolint",
             "cpplint",
             "gofumpt",
-            -- "go_revive",
+            "go_revive",
             "solhint",
             "fixjson",
             "stylelint",
-            "php-cs-fixer",
+            "phpcbf",
             "svelte"
         },
         auto_update = true,

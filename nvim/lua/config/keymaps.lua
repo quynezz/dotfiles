@@ -1,5 +1,5 @@
-local opts = { noremap = true, silent = true }
 local keymap = vim.keymap
+local opts = { noremap = true, silent = true }
 local vim = vim
 
 keymap.set("n", "<leader>m", ":NvimTreeFocus<CR>", opts)

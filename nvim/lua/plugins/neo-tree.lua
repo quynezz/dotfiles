@@ -50,14 +50,13 @@ return {
 					"tmp",
 					"temp",
 					"cache",
-                    -- ignore framework-specific directories
-                    ".svelte-kit",
-                    ".next",
-                    ".nuxt",
-                    ".astro",
-                    ".parcel-cache",
-                    ".vite",
-                    ".gitignore"
+					".svelte-kit",
+					".next",
+					".nuxt",
+					".astro",
+					".parcel-cache",
+					".vite",
+					".gitignore",
 				},
 			},
 		},
@@ -87,22 +86,21 @@ return {
 	end,
 
 	init = function()
-		-- Highlights UI
 		local function set_hl()
-			vim.api.nvim_set_hl(0, "LineNr", { fg = "#949494", bg = "NONE" })
-			vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#FFFFFF", bg = "NONE", bold = true })
-			vim.api.nvim_set_hl(0, "CursorLine", { bg = "#262626", bold = true })
+			vim.api.nvim_set_hl(0, "LineNr", { fg = "#4f4f4f", bg = "NONE" })
+			vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#f6c177", bg = "NONE", bold = true })
+			vim.api.nvim_set_hl(0, "CursorLine", { bg = "NONE", bold = true })
 			vim.api.nvim_set_hl(0, "NeoTreeNormal", { fg = "#FFFFFF", bg = "#1C2526" })
 			vim.api.nvim_set_hl(0, "NeoTreeFileName", { fg = "#E5E5E5", bg = "NONE" })
 			vim.api.nvim_set_hl(0, "NeoTreeModified", { fg = "#FFD700", bg = "NONE" })
-			vim.api.nvim_set_hl(0, "NeoTreeTitleBar", { fg = "#E5E5E5", bg = "#1C2526", bold = true })
+			vim.api.nvim_set_hl(0, "NeoTreeTitleBar", { fg = "#E5E5E5", bg = "NONE", bold = true })
+			vim.api.nvim_set_hl(0, "NeoTreeDirectoryIcon", { fg = "#f6c177", bg = "NONE" })
 			vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE" })
 		end
 
 		set_hl()
 		vim.api.nvim_create_autocmd("ColorScheme", {
 			pattern = "*",
-
 			callback = set_hl,
 		})
 	end,

@@ -1,14 +1,15 @@
 local on_attach = require("util.lsp").on_attach
 local typescript_organise_imports = require("util.lsp").typescript_organise_imports
 local config = function()
-	-- Set LSP log level to INFO for detailed logging
+
+    -- Set LSP log level to INFO for detailed logging
 	vim.lsp.set_log_level("INFO")
 
 	require("neoconf").setup({})
 	require("mason").setup()
 	require("mason-lspconfig").setup({
 		ensure_installed = {
-			-- "gopls",
+			"gopls",
 			"solidity_ls",
 			"lua_ls",
 			"jsonls",
@@ -21,8 +22,8 @@ local config = function()
 			"dockerls",
 			"efm",
 			"intelephense",
-			-- "sqls",
-			-- "clangd", -- Added for C++ support
+			"sqls",
+			"clangd", -- Added for C++ support
 			"tailwindcss", -- Added Tailwind CSS LSP
 			"svelte",
 		},
@@ -47,6 +48,7 @@ local config = function()
 			prefix = function(diagnostic)
 				return diagnostic_icons[diagnostic.severity] or "● "
 			end,
+
 			source = false,
 			spacing = 1,
 			format = function(diagnostic)
@@ -70,11 +72,11 @@ local config = function()
 	})
 
 	-- Go
-	-- lspconfig.gopls.setup({
-	--       capabilities = capabilities,
-	--       on_attach = on_attach,
-	--       root_dir = lspconfig.util.root_pattern("go.mod", ".git"),
-	-- })
+	lspconfig.gopls.setup({
+		capabilities = capabilities,
+		on_attach = on_attach,
+		root_dir = lspconfig.util.root_pattern("go.mod", ".git"),
+	})
 
 	-- Solidity
 	lspconfig.solidity_ls.setup({
@@ -99,6 +101,7 @@ local config = function()
 		capabilities = capabilities,
 		on_attach = on_attach,
 		root_dir = lspconfig.util.root_pattern(".git", "stylua.toml"),
+
 		settings = {
 			Lua = {
 				diagnostics = {
@@ -175,11 +178,12 @@ local config = function()
 	--       on_attach = on_attach,
 	--       filetypes = { "sql", "mysql" },
 	--       root_dir = lspconfig.util.root_pattern(".git", "package.json") or vim.fn.getcwd(),
+
 	-- })
 
 	local mason_registry = require("mason-registry")
 	local vue_language_server = mason_registry.get_package("vue-language-server"):get_install_path()
-		.. "/node_modules/@vue/language-server"
+ .. "/node_modules/@vue/language-server"
 
 	-- TypeScript/JavaScript
 	lspconfig.ts_ls.setup({
@@ -214,6 +218,7 @@ local config = function()
 			javascript = {
 				indentStyle = "space",
 				indentSize = 2,
+
 				inlayHints = {
 					includeInlayParameterNameHints = "none",
 					includeInlayParameterNameHintsWhenArgumentMatchesName = false,
@@ -233,6 +238,7 @@ local config = function()
 				{
 					name = "@vue/typescript-plugin",
 					location = vue_language_server,
+
 					languages = { "vue" },
 				},
 			},
@@ -360,6 +366,20 @@ local config = function()
 		},
 	})
 
+	-- C++ with clangd
+	lspconfig.clangd.setup({
+		capabilities = capabilities,
+
+		on_attach = on_attach,
+		filetypes = { "c", "cpp", "objc", "objcpp" },
+		root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", ".git") or vim.fn.getcwd(),
+		settings = {
+			clangd = {
+				arguments = { "--background-index", "--suggest-missing-includes" },
+			},
+		},
+	})
+
 	-- Set up EFM tools
 	local gofumpt = require("efmls-configs.formatters.gofumpt")
 	local go_revive = require("efmls-configs.linters.go_revive")
@@ -374,9 +394,13 @@ local config = function()
 	local shfmt = require("efmls-configs.formatters.shfmt")
 	local hadolint = require("efmls-configs.linters.hadolint")
 	local stylelint = require("efmls-configs.linters.stylelint")
-    -- php formatting and linting
-    local phpcbf = require("efmls-configs.formatters.phpcbf")
-	-- local cpplint = require("efmls-configs.linters.cpplint") -- Added for C++ linting
+	-- php formatting and linting
+	local phpcbf = require("efmls-configs.formatters.phpcbf")
+    local clang_format = {
+        -- require("efmls-configs.formatters.clang_format"),
+        formatCommand = "clang-format --assume-filename=.cpp -style='{BasedOnStyle: LLVM, IndentWidth: 4, TabWidth: 4, UseTab: Never}'",
+        formatStdin = true,
+    }
 
 	-- Configure EFM server
 	lspconfig.efm.setup({
@@ -384,6 +408,7 @@ local config = function()
 			"solidity",
 			"lua",
 			"python",
+
 			"json",
 			"jsonc",
 			"sh",
@@ -399,10 +424,10 @@ local config = function()
 			"css",
 			"go",
 			"php",
-			-- "sql",
+			"sql",
 			"mysql",
-			"cpp", -- Added for C++ support
-			"c", -- Added for C support
+			"cpp",
+			"c",
 			"svelte",
 		},
 		root_dir = lspconfig.util.root_pattern(".git", "package.json", "tsconfig.json", "jsconfig.json")
@@ -435,10 +460,10 @@ local config = function()
 				css = { stylelint, prettier_d },
 				go = { gofumpt, go_revive },
 				php = { phpcbf, eslint_d, prettier_d },
-				-- sql = { sqlfluff },
-				-- mysql = { sqlfluff },
-				-- cpp = { cpplint }, -- Added for C++ linting
-				-- c = { cpplint }, -- Added for C linting
+				sql = { sqlfluff },
+				mysql = { sqlfluff },
+				c = { clang_format },
+				cpp = { clang_format, eslint_d, prettier_d  },
 				svelte = { eslint_d, prettier_d },
 			},
 		},
@@ -449,19 +474,6 @@ local config = function()
 			client.server_capabilities.diagnosticProvider = false
 			vim.notify("File type 🗄: " .. vim.bo.filetype, vim.log.levels.INFO)
 		end,
-	})
-
-	-- C++ with clangd
-	lspconfig.clangd.setup({
-		capabilities = capabilities,
-		on_attach = on_attach,
-		filetypes = { "c", "cpp", "objc", "objcpp" },
-		root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", ".git") or vim.fn.getcwd(),
-		settings = {
-			clangd = {
-				arguments = { "--background-index", "--suggest-missing-includes" },
-			},
-		},
 	})
 end
 return {

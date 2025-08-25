@@ -1,8 +1,7 @@
 local on_attach = require("util.lsp").on_attach
 local typescript_organise_imports = require("util.lsp").typescript_organise_imports
 local config = function()
-
-    -- Set LSP log level to INFO for detailed logging
+	-- Set LSP log level to INFO for detailed logging
 	vim.lsp.set_log_level("INFO")
 
 	require("neoconf").setup({})
@@ -183,7 +182,7 @@ local config = function()
 
 	local mason_registry = require("mason-registry")
 	local vue_language_server = mason_registry.get_package("vue-language-server"):get_install_path()
- .. "/node_modules/@vue/language-server"
+		.. "/node_modules/@vue/language-server"
 
 	-- TypeScript/JavaScript
 	lspconfig.ts_ls.setup({
@@ -396,11 +395,11 @@ local config = function()
 	local stylelint = require("efmls-configs.linters.stylelint")
 	-- php formatting and linting
 	local phpcbf = require("efmls-configs.formatters.phpcbf")
-    local clang_format = {
-        -- require("efmls-configs.formatters.clang_format"),
-        formatCommand = "clang-format --assume-filename=.cpp -style='{BasedOnStyle: LLVM, IndentWidth: 4, TabWidth: 4, UseTab: Never}'",
-        formatStdin = true,
-    }
+    local clang_format = require("efmls-configs.formatters.clang_format")
+	 clang_format = {
+		formatCommand = "clang-format --assume-filename=.cpp -style='{BasedOnStyle: LLVM, IndentWidth: 4, TabWidth: 4, UseTab: Never}'",
+		formatStdin = true,
+	}
 
 	-- Configure EFM server
 	lspconfig.efm.setup({
@@ -408,7 +407,7 @@ local config = function()
 			"solidity",
 			"lua",
 			"python",
-
+            "go",
 			"json",
 			"jsonc",
 			"sh",
@@ -428,7 +427,6 @@ local config = function()
 			"mysql",
 			"cpp",
 			"c",
-			"svelte",
 		},
 		root_dir = lspconfig.util.root_pattern(".git", "package.json", "tsconfig.json", "jsconfig.json")
 			or vim.fn.getcwd(),
@@ -463,7 +461,7 @@ local config = function()
 				sql = { sqlfluff },
 				mysql = { sqlfluff },
 				c = { clang_format },
-				cpp = { clang_format, eslint_d, prettier_d  },
+				cpp = { clang_format, eslint_d, prettier_d },
 				svelte = { eslint_d, prettier_d },
 			},
 		},

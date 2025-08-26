@@ -86,3 +86,4 @@ action = "CreateNewWindow"
 # Note: do no config the directory name :D, might config later
 # [[working_directories]]
 # path = "/mnt/c/Users/3x3q/Documents/Projects"
+

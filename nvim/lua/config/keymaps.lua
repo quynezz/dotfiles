@@ -28,23 +28,6 @@ vim.api.nvim_set_keymap("n", "<leader>e", ":Neotree toggle<CR>", { noremap = tru
 -- Override "=G" to reformat based on filetype
 vim.api.nvim_set_keymap("n", "=G", ":lua vim.lsp.buf.format()<CR>", { noremap = true, silent = true })
 
--- Define :FormatCode command
-vim.api.nvim_create_user_command("FormatCode", function()
-	-- Save cursor position
-	local cursor = vim.api.nvim_win_get_cursor(0)
-	-- Set indentation settings explicitly
-	vim.opt.tabstop = 4
-	vim.opt.shiftwidth = 4
-	vim.opt.expandtab = true
-	-- Format the entire file
-	vim.cmd(":lua vim.lsp.buf.format()") -- Use = to reindent based on filetype
-	-- Remove trailing whitespace
-	vim.cmd([[%s/\s\+$//e]])
-	-- Restore cursor position
-	vim.api.nvim_win_set_cursor(0, cursor)
-	vim.notify("Done Formatting!")
-end, { desc = "Format entire file with 4-space indentation and return cursor to previous position" })
-
 -- Remove trailing whitespace
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*",
@@ -71,3 +54,4 @@ vim.api.nvim_create_user_command("DeleteAllBuffersExceptCurrent", function()
 		end
 	end
 end, { desc = "Delete all buffers except the current one" })
+

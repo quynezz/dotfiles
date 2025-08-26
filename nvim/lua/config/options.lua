@@ -23,6 +23,7 @@ vim.g.snacks_animate = false
 vim.g.scroll_speed = 10
 -- Disable the autoformatting
 vim.g.autoformat = false
+
 -- Disable Image Sixel
 vim.g.disable_sixel = true
 vim.opt.number = true
@@ -35,4 +36,3 @@ vim.opt.expandtab = true
 vim.opt.guicursor = "n-v-c-i-ci-ve-r-cr-o:block"
 -- Disable the swap file
 vim.o.swapfile = false
-

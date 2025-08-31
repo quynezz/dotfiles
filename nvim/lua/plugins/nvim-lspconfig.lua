@@ -1,9 +1,7 @@
+---@diagnostic disable: 113
 local on_attach = require("util.lsp").on_attach
 local typescript_organise_imports = require("util.lsp").typescript_organise_imports
 local config = function()
-	-- Set LSP log level to INFO for detailed logging
-	vim.lsp.set_log_level("INFO")
-
 	require("neoconf").setup({})
 	require("mason").setup()
 	require("mason-lspconfig").setup({
@@ -22,8 +20,8 @@ local config = function()
 			"efm",
 			"intelephense",
 			"sqls",
-			"clangd", -- Added for C++ support
-			"tailwindcss", -- Added Tailwind CSS LSP
+			"clangd",
+			"tailwindcss",
 			"svelte",
 		},
 		automatic_installation = true,
@@ -32,6 +30,7 @@ local config = function()
 	local cmp_nvim_lsp = require("cmp_nvim_lsp")
 	local lspconfig = require("lspconfig")
 	local capabilities = cmp_nvim_lsp.default_capabilities()
+    local vim = vim
 
 	-- Define diagnostic icons
 	local diagnostic_icons = {
@@ -379,10 +378,23 @@ local config = function()
 		},
 	})
 
-	-- Set up EFM tools
+	-- For Java
+	lspconfig.jdtls.setup({
+		capabilities = capabilities,
+		on_attach = on_attach,
+		filetypes = { "java" },
+		root_dir = lspconfig.util.root_pattern(".git", "mvnw", "gradlew", "pom.xml", "build.gradle"),
+	})
+
+	-- SET UP EFM TOOLS --
+
+    -- Go
 	local gofumpt = require("efmls-configs.formatters.gofumpt")
-	local go_revive = require("efmls-configs.linters.go_revive")
-	local solhint = require("efmls-configs.linters.solhint")
+    -- local staticcheck = require("efmls-configs.linters.staticcheck")
+    local golangci_lint = require("efmls-configs.linters.golangci_lint")
+     -- set staticcheck to set the unused variable to warning instead of error
+
+    local solhint = require("efmls-configs.linters.solhint")
 	local prettier_d = require("efmls-configs.formatters.prettier_d")
 	local luacheck = require("efmls-configs.linters.luacheck")
 	local stylua = require("efmls-configs.formatters.stylua")
@@ -393,10 +405,11 @@ local config = function()
 	local shfmt = require("efmls-configs.formatters.shfmt")
 	local hadolint = require("efmls-configs.linters.hadolint")
 	local stylelint = require("efmls-configs.linters.stylelint")
-	-- php formatting and linting
+
+	-- PHP formatting and linting
 	local phpcbf = require("efmls-configs.formatters.phpcbf")
-    local clang_format = require("efmls-configs.formatters.clang_format")
-	 clang_format = {
+	local clang_format = require("efmls-configs.formatters.clang_format")
+	clang_format = {
 		formatCommand = "clang-format --assume-filename=.cpp -style='{BasedOnStyle: LLVM, IndentWidth: 4, TabWidth: 4, UseTab: Never}'",
 		formatStdin = true,
 	}
@@ -407,7 +420,7 @@ local config = function()
 			"solidity",
 			"lua",
 			"python",
-            "go",
+			"go",
 			"json",
 			"jsonc",
 			"sh",
@@ -427,6 +440,7 @@ local config = function()
 			"mysql",
 			"cpp",
 			"c",
+			"java",
 		},
 		root_dir = lspconfig.util.root_pattern(".git", "package.json", "tsconfig.json", "jsconfig.json")
 			or vim.fn.getcwd(),
@@ -456,13 +470,14 @@ local config = function()
 				docker = { hadolint, prettier_d },
 				html = { prettier_d },
 				css = { stylelint, prettier_d },
-				go = { gofumpt, go_revive },
+				go = { gofumpt, --[[ staticcheck, ]] golangci_lint },
 				php = { phpcbf, eslint_d, prettier_d },
 				sql = { sqlfluff },
 				mysql = { sqlfluff },
 				c = { clang_format },
 				cpp = { clang_format, eslint_d, prettier_d },
 				svelte = { eslint_d, prettier_d },
+				java = {},
 			},
 		},
 		on_attach = function(client, bufnr)

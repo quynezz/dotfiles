@@ -1,5 +1,7 @@
 local keymap = vim.keymap
+
 local opts = { noremap = true, silent = true }
+
 local vim = vim
 
 keymap.set("n", "<leader>m", ":NvimTreeFocus<CR>", opts)
@@ -30,6 +32,7 @@ vim.api.nvim_set_keymap("n", "=G", ":lua vim.lsp.buf.format()<CR>", { noremap = 
 
 -- Remove trailing whitespace
 vim.api.nvim_create_autocmd("BufWritePre", {
+
 	pattern = "*",
 	callback = function()
 		-- Save cursor position
@@ -37,14 +40,16 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		-- Remove trailing whitespace
 		vim.cmd([[%s/\s\+$//e]])
 		-- Restore cursor position
+
 		vim.api.nvim_win_set_cursor(0, cursor)
 	end,
 })
 
--- Set up keymaps for the delete all the buffer execpt the current buffer command
+-- Set up keymaps for the delete all the buffer except the current buffer command
 vim.api.nvim_create_user_command("DeleteAllBuffersExceptCurrent", function()
 	-- Get the current buffer number
 	local current_buf = vim.api.nvim_get_current_buf()
+
 	-- Get all buffer numbers
 	local all_buffers = vim.api.nvim_list_bufs()
 	-- Iterate through all buffers and delete them if they are not the current one
@@ -55,3 +60,15 @@ vim.api.nvim_create_user_command("DeleteAllBuffersExceptCurrent", function()
 	end
 end, { desc = "Delete all buffers except the current one" })
 
+-- Get FullPath command
+vim.api.nvim_create_user_command("FullPath", function()
+	local full_path = vim.fn.expand("%:p") -- Get full path of current file
+
+	if full_path == "" then
+		print("No file path available (e.g., new buffer)")
+
+		return
+	end
+	vim.fn.setreg("+", full_path) -- Copy to system clipboard
+	print("Full path copied to clipboard: " .. full_path)
+end, { desc = "Copy full path of current file to clipboard" })

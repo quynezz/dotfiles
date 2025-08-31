@@ -46,7 +46,7 @@ local mapkey = function(keymaps, command, vimmode, options)
 end
 
 vim.keymap.set("n", "<leader>O", function()
-	if vim.bo.filetype == "cpp" then
+	if vim.bo.filetype == "cpp" or vim.bo.filetype == "c" then
 		vim.cmd("write")
 		local filepath = vim.fn.expand("%:p")
 		local filename = vim.fn.expand("%:t:r")

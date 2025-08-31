@@ -1,21 +1,20 @@
 -- Set vim global variables and options
 local vim = vim
-
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Options are automatically loaded before lazy.nvim startup
 -- Add any additional options here
 vim.opt.clipboard = "unnamedplus"
 vim.g.clipboard = {
-    name = "xclip",
-    copy = {
-        ["+"] = "xclip -selection clipboard",
-        ["*"] = "xclip -selection clipboard",
-    },
-    paste = {
-        ["+"] = "xclip -selection clipboard -o",
-        ["*"] = "xclip -selection clipboard -o",
-    },
-    cache_enabled = 0,
+	name = "xclip",
+	copy = {
+		["+"] = "xclip -selection clipboard",
+		["*"] = "xclip -selection clipboard",
+	},
+	paste = {
+		["+"] = "xclip -selection clipboard -o",
+		["*"] = "xclip -selection clipboard -o",
+	},
+	cache_enabled = 0,
 }
 -- In ~/.config/nvim/lua/config/options.lua or a similar file
 -- Removing the trailing space "--"
@@ -38,4 +37,3 @@ vim.opt.expandtab = true
 vim.opt.guicursor = "n-v-c-i-ci-ve-r-cr-o:block"
 -- Disable the swap file
 vim.o.swapfile = false
-

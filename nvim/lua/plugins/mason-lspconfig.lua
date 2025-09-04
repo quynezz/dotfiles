@@ -37,6 +37,7 @@ local mason_lspconfig = {
             "sqls",
             "clangd",
             "svelte",
+            "jdtls"
         },
         automatic_installation = true,
     },

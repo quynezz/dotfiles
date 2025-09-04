@@ -4,20 +4,19 @@ local vim = vim
 -- Options are automatically loaded before lazy.nvim startup
 -- Add any additional options here
 vim.opt.clipboard = "unnamedplus"
-vim.opt.clipboard = "unnamedplus"
-
+-- change to xclip
 vim.g.clipboard = {
-	name = "xsel",
+	name = "win32yank",
 	copy = {
-		["+"] = "xsel --input --clipboard",
-		["*"] = "xsel --input --primary",
+		["+"] = "win32yank.exe -i --crlf",
+		["*"] = "win32yank.exe -i --crlf",
 	},
 	paste = {
 
-		["+"] = "xsel --output --clipboard",
-		["*"] = "xsel --output --primary",
+		["+"] = "win32yank.exe -o --lf",
+		["*"] = "win32yank.exe -o --lf",
 	},
-	cache_enabled = 1,
+	cache_enabled = 0,
 }
 
 -- In ~/.config/nvim/lua/config/options.lua or a similar file

@@ -4,18 +4,22 @@ local vim = vim
 -- Options are automatically loaded before lazy.nvim startup
 -- Add any additional options here
 vim.opt.clipboard = "unnamedplus"
+vim.opt.clipboard = "unnamedplus"
+
 vim.g.clipboard = {
-	name = "xclip",
+	name = "xsel",
 	copy = {
-		["+"] = "xclip -selection clipboard",
-		["*"] = "xclip -selection clipboard",
+		["+"] = "xsel --input --clipboard",
+		["*"] = "xsel --input --primary",
 	},
 	paste = {
-		["+"] = "xclip -selection clipboard -o",
-		["*"] = "xclip -selection clipboard -o",
+
+		["+"] = "xsel --output --clipboard",
+		["*"] = "xsel --output --primary",
 	},
-	cache_enabled = 0,
+	cache_enabled = 1,
 }
+
 -- In ~/.config/nvim/lua/config/options.lua or a similar file
 -- Removing the trailing space "--"
 vim.opt.list = false

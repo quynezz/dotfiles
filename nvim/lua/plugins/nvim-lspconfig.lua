@@ -1,4 +1,3 @@
----@diagnostic disable: 113
 local on_attach = require("util.lsp").on_attach
 local typescript_organise_imports = require("util.lsp").typescript_organise_imports
 local config = function()
@@ -23,14 +22,14 @@ local config = function()
 			"clangd",
 			"tailwindcss",
 			"svelte",
+			"rust_analyzer",
 		},
-		automatic_installation = true,
+		automatic_installation = false,
 	})
-
 	local cmp_nvim_lsp = require("cmp_nvim_lsp")
 	local lspconfig = require("lspconfig")
 	local capabilities = cmp_nvim_lsp.default_capabilities()
-    local vim = vim
+	local vim = vim
 
 	-- Define diagnostic icons
 	local diagnostic_icons = {
@@ -367,7 +366,6 @@ local config = function()
 	-- C++ with clangd
 	lspconfig.clangd.setup({
 		capabilities = capabilities,
-
 		on_attach = on_attach,
 		filetypes = { "c", "cpp", "objc", "objcpp" },
 		root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", ".git") or vim.fn.getcwd(),
@@ -378,23 +376,23 @@ local config = function()
 		},
 	})
 
-	-- For Java
-	lspconfig.jdtls.setup({
-		capabilities = capabilities,
-		on_attach = on_attach,
-		filetypes = { "java" },
-		root_dir = lspconfig.util.root_pattern(".git", "mvnw", "gradlew", "pom.xml", "build.gradle"),
-	})
+    -- java
+    lspconfig.jdtls.setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+        filetypes = { "java" },
+        root_dir = lspconfig.util.root_pattern(".git", "mvnw", "gradlew", "pom.xml", "build.gradle"),
+    })
 
 	-- SET UP EFM TOOLS --
 
-    -- Go
+	-- Go
 	local gofumpt = require("efmls-configs.formatters.gofumpt")
-    -- local staticcheck = require("efmls-configs.linters.staticcheck")
-    local golangci_lint = require("efmls-configs.linters.golangci_lint")
-     -- set staticcheck to set the unused variable to warning instead of error
+	-- local staticcheck = require("efmls-configs.linters.staticcheck")
+	local golangci_lint = require("efmls-configs.linters.golangci_lint")
+	-- set staticcheck to set the unused variable to warning instead of error
 
-    local solhint = require("efmls-configs.linters.solhint")
+	local solhint = require("efmls-configs.linters.solhint")
 	local prettier_d = require("efmls-configs.formatters.prettier_d")
 	local luacheck = require("efmls-configs.linters.luacheck")
 	local stylua = require("efmls-configs.formatters.stylua")
@@ -403,7 +401,6 @@ local config = function()
 	local fixjson = require("efmls-configs.formatters.fixjson")
 	local shellcheck = require("efmls-configs.linters.shellcheck")
 	local shfmt = require("efmls-configs.formatters.shfmt")
-	local hadolint = require("efmls-configs.linters.hadolint")
 	local stylelint = require("efmls-configs.linters.stylelint")
 
 	-- PHP formatting and linting
@@ -413,6 +410,8 @@ local config = function()
 		formatCommand = "clang-format --assume-filename=.cpp -style='{BasedOnStyle: LLVM, IndentWidth: 4, TabWidth: 4, UseTab: Never}'",
 		formatStdin = true,
 	}
+	-- for java
+	local java_format = require("efmls-configs.formatters.google_java_format")
 
 	-- Configure EFM server
 	lspconfig.efm.setup({
@@ -440,7 +439,8 @@ local config = function()
 			"mysql",
 			"cpp",
 			"c",
-			"java",
+            "java",
+			"rust",
 		},
 		root_dir = lspconfig.util.root_pattern(".git", "package.json", "tsconfig.json", "jsconfig.json")
 			or vim.fn.getcwd(),
@@ -467,17 +467,20 @@ local config = function()
 				typescriptreact = { eslint_d, prettier_d },
 				vue = { eslint_d, prettier_d },
 				markdown = { prettier_d },
-				docker = { hadolint, prettier_d },
+				docker = { prettier_d },
 				html = { prettier_d },
 				css = { stylelint, prettier_d },
-				go = { gofumpt, --[[ staticcheck, ]] golangci_lint },
+				go = {
+					gofumpt, --[[ staticcheck, ]]
+					golangci_lint,
+				},
 				php = { phpcbf, eslint_d, prettier_d },
 				sql = { sqlfluff },
 				mysql = { sqlfluff },
 				c = { clang_format },
 				cpp = { clang_format, eslint_d, prettier_d },
 				svelte = { eslint_d, prettier_d },
-				java = {},
+				java = { java_format },
 			},
 		},
 		on_attach = function(client, bufnr)

@@ -40,3 +40,7 @@ vim.opt.expandtab = true
 vim.opt.guicursor = "n-v-c-i-ci-ve-r-cr-o:block"
 -- Disable the swap file
 vim.o.swapfile = false
+
+local java_home = "/usr/lib/jvm/java-21-openjdk-amd64"
+vim.env.JAVA_HOME = java_home
+vim.env.PATH = java_home .. "/bin:" .. vim.env.PATH

@@ -4,8 +4,6 @@ local opts = { noremap = true, silent = true }
 
 local vim = vim
 
-keymap.set("n", "<leader>m", ":NvimTreeFocus<CR>", opts)
-keymap.set("n", "<leader>f", ":NvimTreeToggle<CR>", opts)
 keymap.set("n", "<C-h>", "<C-w>h", opts)
 keymap.set("n", "<C-j>", "<C-w>j", opts)
 keymap.set("n", "<C-k>", "<C-w>k", opts)
@@ -14,7 +12,6 @@ keymap.set("n", "<C-l>", "<C-w>l", opts)
 -- WINDOW MANAGEMENT
 keymap.set("n", "<leader>sv", ":vsplit<CR>", opts)
 keymap.set("n", "<leader>sh", ":split<CR>", opts)
-keymap.set("n", "<leader>m", ":MaximizeToggle<CR>", opts)
 
 -- Indenting
 keymap.set("v", "<", "<gv")
@@ -72,3 +69,6 @@ vim.api.nvim_create_user_command("FullPath", function()
 	vim.fn.setreg("+", full_path) -- Copy to system clipboard
 	print("Full path copied to clipboard: " .. full_path)
 end, { desc = "Copy full path of current file to clipboard" })
+
+-- Other keymaps
+keymap.set("n", "<leader>m", ":MarkdownPreview<CR>", opts)
